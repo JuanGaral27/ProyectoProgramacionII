@@ -31,3 +31,10 @@ struct Libro {
     string estado;
     string rentedBy; // Usuario que ha retirado el libro
 };
+// Prototipos de funciones
+void cargarUsuarios(Usuario usuarios[], int &numUsuarios);
+void guardarUsuarios(const Usuario usuarios[], int numUsuarios);
+void cargarLibros(Libro libros[], int &numLibros);
+void guardarLibros(const Libro libros[], int numLibros);
+bool autenticarUsuario(const string &username, const string &password, const Usuario usuarios[], int numUsuarios, int &indiceUsuario);
+void registrarNuevoUsuario(Usuario usuarios[], int &numUsuarios);
