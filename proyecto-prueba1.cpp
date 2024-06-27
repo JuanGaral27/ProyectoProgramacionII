@@ -65,4 +65,44 @@ int main() {
     cin >> username;
     cout << "Contraseña: ";
     cin >> password;
+// Autenticación del usuario
+    if (!autenticarUsuario(username, password, usuarios, numUsuarios, indiceUsuario)) {
+        cout << "Usuario o contraseña incorrectos. Inténtelo nuevamente." << endl;
+        return 1;
+    }
+
+    // Menú principal según el rol del usuario
+    menuPrincipal(usuarios[indiceUsuario], usuarios, numUsuarios, libros, numLibros);
+
+    // Guardar datos al salir del programa
+    guardarUsuarios(usuarios, numUsuarios);
+    guardarLibros(libros, numLibros);
+
+    return 0;
+    
+}
+// Función para cargar usuarios desde el archivo
+void cargarUsuarios(Usuario usuarios[], int &numUsuarios) {
+    ifstream archivo("./assets/dataProject.csv");
+    string linea;
+
+    if (archivo.is_open()) {
+        getline(archivo, linea); // Ignorar la primera línea (cabecera)
+
+        while (getline(archivo, linea) && numUsuarios < MAX_USUARIOS) {
+            stringstream ss(linea);
+            getline(ss, usuarios[numUsuarios].nombre, ',');
+            getline(ss, usuarios[numUsuarios].apellido, ',');
+            getline(ss, usuarios[numUsuarios].cedula, ',');
+            getline(ss, usuarios[numUsuarios].username, ',');
+            getline(ss, usuarios[numUsuarios].password, ',');
+            getline(ss, usuarios[numUsuarios].accState, ',');
+            getline(ss, usuarios[numUsuarios].role, ',');
+            ss >> usuarios[numUsuarios].balance;
+
+            numUsuarios++;
+        }
+
+        archivo.close();
+    }
 }
