@@ -339,3 +339,77 @@ void menuCliente(const Usuario &currentUser, Usuario usuarios[], int numUsuarios
         }
     } while (opcion != 3);
 }
+
+// Función para comprar un libro
+void comprarLibro(const Usuario &currentUser, Libro libros[], int numLibros) {
+    int codigoLibro;
+    bool libroEncontrado = false;
+
+    cout << "Ingrese el código del libro que desea comprar: ";
+    cin >> codigoLibro;
+
+    for (int i = 0; i < numLibros; ++i) {
+        if (libros[i].codigo == codigoLibro && libros[i].estado == "disponible") {
+            libros[i].estado = "vendido";
+            libroEncontrado = true;
+            cout << "Libro comprado exitosamente!" << endl;
+            break;
+        }
+    }
+
+    if (!libroEncontrado) {
+        cout << "Libro no encontrado o no disponible para compra." << endl;
+    }
+
+    guardarLibros(libros, numLibros);
+}
+
+// Función para retirar un libro
+void retirarLibro(const Usuario &currentUser, Libro libros[], int numLibros) {
+    int codigoLibro;
+    bool libroEncontrado = false;
+
+    cout << "Ingrese el código del libro que desea retirar: ";
+    cin >> codigoLibro;
+
+    for (int i = 0; i < numLibros; ++i) {
+        if (libros[i].codigo == codigoLibro && libros[i].estado == "disponible") {
+            libros[i].estado = "retirado";
+            libros[i].rentedBy = currentUser.username;
+            libroEncontrado = true;
+            cout << "Libro retirado exitosamente!" << endl;
+            break;
+        }
+    }
+
+    if (!libroEncontrado) {
+        cout << "Libro no encontrado o no disponible para retirar." << endl;
+    }
+
+    guardarLibros(libros, numLibros);
+}
+
+// Función para devolver un libro
+void devolverLibro(const Usuario &currentUser, Libro libros[], int numLibros) {
+    int codigoLibro;
+    bool libroEncontrado = false;
+
+    cout << "Ingrese el código del libro que desea devolver: ";
+    cin >> codigoLibro;
+
+    for (int i = 0; i < numLibros; ++i) {
+        if (libros[i].codigo == codigoLibro && libros[i].estado == "retirado" && libros[i].rentedBy == currentUser.username) {
+            libros[i].estado = "disponible";
+            libros[i].rentedBy = "";
+            libroEncontrado = true;
+            cout << "Libro devuelto exitosamente!" << endl;
+            break;
+        }
+    }
+
+    if (!libroEncontrado) {
+        cout << "Libro no encontrado o no pertenece a este usuario." << endl;
+    }
+
+    guardarLibros(libros, numLibros);
+}
