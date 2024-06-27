@@ -179,3 +179,99 @@ void guardarLibros(const Libro libros[], int numLibros) {
     archivo.close();
 }
 
+// Función para autenticar usuario
+bool autenticarUsuario(const string &username, const string &password, const Usuario usuarios[], int numUsuarios, int &indiceUsuario) {
+    for (int i = 0; i < numUsuarios; ++i) {
+        if (usuarios[i].username == username && usuarios[i].password == password) {
+            indiceUsuario = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+// Función para registrar un nuevo usuario
+void registrarNuevoUsuario(Usuario usuarios[], int &numUsuarios) {
+    if (numUsuarios >= MAX_USUARIOS) {
+        cout << "No se pueden agregar más usuarios. Capacidad máxima alcanzada." << endl;
+        return;
+    }
+
+    Usuario nuevoUsuario;
+
+    cout << "Ingrese el nombre del nuevo usuario: ";
+    cin >> nuevoUsuario.nombre;
+    cout << "Ingrese el apellido del nuevo usuario: ";
+    cin >> nuevoUsuario.apellido;
+    cout << "Ingrese la cédula del nuevo usuario: ";
+    cin >> nuevoUsuario.cedula;
+    cout << "Ingrese el nombre de usuario para esta cuenta: ";
+    cin >> nuevoUsuario.username;
+    cout << "Ingrese la contraseña a utilizar por esta cuenta: ";
+    cin >> nuevoUsuario.password;
+    nuevoUsuario.accState = "activo";
+    cout << "Ingrese el tipo de usuario a ser registrado (cliente, empleado, administrador): ";
+    cin >> nuevoUsuario.role;
+    cout << "Ingrese el saldo inicial del usuario: ";
+    cin >> nuevoUsuario.balance;
+
+    usuarios[numUsuarios] = nuevoUsuario;
+    numUsuarios++;
+
+    guardarUsuarios(usuarios, numUsuarios);
+
+    cout << "Usuario registrado exitosamente." << endl;
+}
+
+// Menú principal según el rol del usuario
+void menuPrincipal(const Usuario &currentUser, Usuario usuarios[], int numUsuarios, Libro libros[], int numLibros) {
+    cout << "Bienvenido, " << currentUser.nombre << "!" << endl;
+    cout << "Rol: " << currentUser.role << endl;
+
+    if (currentUser.role == "administrador") {
+        menuAdmin(currentUser, usuarios, numUsuarios, libros, numLibros);
+    } else if (currentUser.role == "empleado") {
+        menuEmpleado(currentUser, usuarios, numUsuarios, libros, numLibros);
+    } else if (currentUser.role == "cliente") {
+        menuCliente(currentUser, usuarios, numUsuarios, libros, numLibros);
+    }
+}
+
+// Menú de opciones para administrador
+void menuAdmin(const Usuario &currentUser, Usuario usuarios[], int numUsuarios, Libro libros[], int numLibros) {
+    int opcion;
+
+    do {
+        cout << "\nMenú Administrador:" << endl;
+        cout << "1. Registrar nuevo usuario" << endl;
+        cout << "2. Listar todos los usuarios" << endl;
+        cout << "3. Listar todos los libros" << endl;
+        cout << "4. Salir" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1:
+                registrarNuevoUsuario(usuarios, numUsuarios);
+                break;
+            case 2:
+                cout << "\nListado de Usuarios:" << endl;
+                for (int i = 0; i < numUsuarios; ++i) {
+                    cout << usuarios[i].nombre << " " << usuarios[i].apellido << " - " << usuarios[i].role << endl;
+                }
+                break;
+            case 3:
+                cout << "\nListado de Libros:" << endl;
+                for (int i = 0; i < numLibros; ++i) {
+                    cout << libros[i].titulo << " by " << libros[i].autor << " - " << libros[i].estado << endl;
+                }
+                break;
+            case 4:
+                cout << "Saliendo..." << endl;
+                break;
+            default:
+                cout << "Opción no válida. Inténtelo de nuevo." << endl;
+        }
+    } while (opcion != 4);
+}
+
