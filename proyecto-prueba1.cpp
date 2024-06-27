@@ -32,6 +32,7 @@ struct Libro {
     string estado;
     string rentedBy; // Usuario que ha retirado el libro
 };
+
 // Prototipos de funciones
 void cargarUsuarios(Usuario usuarios[], int &numUsuarios);
 void guardarUsuarios(const Usuario usuarios[], int numUsuarios);
@@ -66,7 +67,8 @@ int main() {
     cin >> username;
     cout << "Contraseña: ";
     cin >> password;
-// Autenticación del usuario
+
+    // Autenticación del usuario
     if (!autenticarUsuario(username, password, usuarios, numUsuarios, indiceUsuario)) {
         cout << "Usuario o contraseña incorrectos. Inténtelo nuevamente." << endl;
         return 1;
@@ -80,8 +82,8 @@ int main() {
     guardarLibros(libros, numLibros);
 
     return 0;
-    
 }
+
 // Función para cargar usuarios desde el archivo
 void cargarUsuarios(Usuario usuarios[], int &numUsuarios) {
     ifstream archivo("./assets/dataProject.csv");
@@ -107,6 +109,7 @@ void cargarUsuarios(Usuario usuarios[], int &numUsuarios) {
         archivo.close();
     }
 }
+
 // Función para guardar usuarios en el archivo
 void guardarUsuarios(const Usuario usuarios[], int numUsuarios) {
     ofstream archivo("./assets/dataProject.csv");
@@ -125,3 +128,54 @@ void guardarUsuarios(const Usuario usuarios[], int numUsuarios) {
 
     archivo.close();
 }
+
+// Función para cargar libros desde el archivo
+void cargarLibros(Libro libros[], int &numLibros) {
+    ifstream archivo("./assets/books.csv");
+    string linea;
+
+    if (archivo.is_open()) {
+        getline(archivo, linea); // Ignorar la primera línea (cabecera)
+
+        while (getline(archivo, linea) && numLibros < MAX_LIBROS) {
+            stringstream ss(linea);
+            getline(ss, libros[numLibros].titulo, ',');
+            getline(ss, libros[numLibros].autor, ',');
+            ss >> libros[numLibros].año;
+            ss.ignore(); // Ignorar la coma
+            getline(ss, libros[numLibros].genero, ',');
+            ss >> libros[numLibros].precio_renta;
+            ss.ignore(); // Ignorar la coma
+            ss >> libros[numLibros].precio_compra;
+            ss.ignore(); // Ignorar la coma
+            ss >> libros[numLibros].codigo;
+            getline(ss, libros[numLibros].estado, ',');
+            getline(ss, libros[numLibros].rentedBy);
+
+            numLibros++;
+        }
+
+        archivo.close();
+    }
+}
+
+// Función para guardar libros en el archivo
+void guardarLibros(const Libro libros[], int numLibros) {
+    ofstream archivo("./assets/books.csv");
+    archivo << "titulo,autor,año,genero,precio_renta,precio_compra,codigo,estado,rentedBy\n";
+
+    for (int i = 0; i < numLibros; ++i) {
+        archivo << libros[i].titulo << ','
+                << libros[i].autor << ','
+                << libros[i].año << ','
+                << libros[i].genero << ','
+                << fixed << setprecision(2) << libros[i].precio_renta << ','
+                << fixed << setprecision(2) << libros[i].precio_compra << ','
+                << libros[i].codigo << ','
+                << libros[i].estado << ','
+                << libros[i].rentedBy << '\n';
+    }
+
+    archivo.close();
+}
+
