@@ -274,4 +274,68 @@ void menuAdmin(const Usuario &currentUser, Usuario usuarios[], int numUsuarios, 
         }
     } while (opcion != 4);
 }
+// Menú de opciones para empleado
+void menuEmpleado(const Usuario &currentUser, Usuario usuarios[], int numUsuarios, Libro libros[], int numLibros) {
+    int opcion;
 
+    do {
+        cout << "\nMenú Empleado:" << endl;
+        cout << "1. Listar todos los libros" << endl;
+        cout << "2. Retirar libro" << endl;
+        cout << "3. Devolver libro" << endl;
+        cout << "4. Salir" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1:
+                cout << "\nListado de Libros:" << endl;
+                for (int i = 0; i < numLibros; ++i) {
+                    cout << libros[i].titulo << " by " << libros[i].autor << " - " << libros[i].estado << endl;
+                }
+                break;
+            case 2:
+                retirarLibro(currentUser, libros, numLibros);
+                break;
+            case 3:
+                devolverLibro(currentUser, libros, numLibros);
+                break;
+            case 4:
+                cout << "Saliendo..." << endl;
+                break;
+            default:
+                cout << "Opción no válida. Inténtelo de nuevo." << endl;
+        }
+    } while (opcion != 4);
+}
+
+// Menú de opciones para cliente
+void menuCliente(const Usuario &currentUser, Usuario usuarios[], int numUsuarios, Libro libros[], int numLibros) {
+    int opcion;
+
+    do {
+        cout << "\nMenú Cliente:" << endl;
+        cout << "1. Listar todos los libros" << endl;
+        cout << "2. Comprar libro" << endl;
+        cout << "3. Salir" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1:
+                cout << "\nListado de Libros:" << endl;
+                for (int i = 0; i < numLibros; ++i) {
+                    cout << libros[i].titulo << " by " << libros[i].autor << " - " << libros[i].estado << endl;
+                }
+                break;
+            case 2:
+                comprarLibro(currentUser, libros, numLibros);
+                break;
+            case 3:
+                cout << "Saliendo..." << endl;
+                break;
+            default:
+                cout << "Opción no válida. Inténtelo de nuevo." << endl;
+        }
+    } while (opcion != 3);
+}
