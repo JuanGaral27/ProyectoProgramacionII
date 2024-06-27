@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 
@@ -105,4 +106,22 @@ void cargarUsuarios(Usuario usuarios[], int &numUsuarios) {
 
         archivo.close();
     }
+}
+// Función para guardar usuarios en el archivo
+void guardarUsuarios(const Usuario usuarios[], int numUsuarios) {
+    ofstream archivo("./assets/dataProject.csv");
+    archivo << "nombre,apellido,cedula,username,password,accState,role,balance\n";
+
+    for (int i = 0; i < numUsuarios; ++i) {
+        archivo << usuarios[i].nombre << ','
+                << usuarios[i].apellido << ','
+                << usuarios[i].cedula << ','
+                << usuarios[i].username << ','
+                << usuarios[i].password << ','
+                << usuarios[i].accState << ','
+                << usuarios[i].role << ','
+                << fixed << setprecision(2) << usuarios[i].balance << '\n';
+    }
+
+    archivo.close();
 }
